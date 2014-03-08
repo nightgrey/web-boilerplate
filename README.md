@@ -1,4 +1,4 @@
-boilerplate
+Boilerplate
 ===========
 
-Boilerplate for starting websites.
+A boilerplate for developing websites.
