@@ -1,0 +1,109 @@
+/**
+	Helper
+**/
+
+/* Clearfix */
+.cf {
+	&:after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}
+
+/* Floats */
+.float--left { float:left; }
+.float--right { float:right; }
+.float--none { float:none; }
+
+/* Alignment */
+.text--left { text-align: left; }
+.text--right { text-align: right; }
+.text--center { text-align: center; }
+.text--justify { text-align: justify; }
+
+/* Navigation */
+.nav {
+	list-style: none;
+	margin-left: 0;
+	@extend .cf;
+
+	> li {
+
+		&,
+		> a{
+			display: inline-block;
+		   *display: inline;
+			zoom: 1;
+		}
+	}
+}
+
+/* Navigation: stacked */
+.nav--stacked {
+
+	> li {
+		display: list-item;
+
+		> a {
+			display: block;
+		}
+	}
+}
+
+/* Navigation: fits parent*/
+.nav--fit {
+	display: table;
+	width: 100%;
+
+	> li {
+		display: table-cell;
+
+		> a {
+			display: block;
+		}
+	}
+}
+
+/* Buttons */
+.btn {
+	display: inline-block;
+	vertical-align: middle;
+	white-space: nowrap;
+	font-family: inherit;
+	font-size: 100%;
+	cursor: pointer;
+	border: none;
+	margin: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	line-height: 3;
+	padding-right: 1em;
+	padding-left: 1em;
+}
+
+.btn {
+
+	&,
+	&:hover {
+		text-decoration: none;
+	}
+
+	&:active,
+	&:focus {
+		outline: none;
+	}
+}
+
+.btn--full {
+	width: 100%;
+	padding-right: 0;
+	padding-left: 0;
+	text-align: center;
+}
+
+.btn--natural{
+	vertical-align: baseline;
+	font-size: inherit;
+	line-height: inherit;
+}

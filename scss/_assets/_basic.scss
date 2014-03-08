@@ -1,3 +1,84 @@
 /**
 	Basic
 **/
+
+*,*:before,*:after {
+	@include box-sizing(border-box);
+}
+
+html{
+	font:#{($base-font-size/16px)*1em}/#{$line-height-ratio} $base-font-family;
+	overflow-y:scroll;
+	min-height:100%;
+}
+
+h1,h2,h3,h4,h5,h6,hgroup,
+ul,ol,dl,
+blockquote,p,address,
+table,
+fieldset,figure,
+pre,
+%sass-margin-bottom {
+	margin-bottom: $base-spacing-unit;
+	margin-bottom: ($base-spacing-unit / $base-font-size)*1rem;
+}
+
+fieldset {
+	padding: $base-spacing-unit;
+}
+
+ul,ol,dd {
+	margin-left: 2 * $base-spacing-unit;
+	margin-left: (2 * $base-spacing-unit / $base-font-size)*1rem;
+}
+
+li {
+	> ul,
+	> ol {
+		margin-bottom:0;
+	}
+}
+
+table {
+	width: 100%;
+}
+
+th,td {
+	padding: $base-spacing-unit / 4;
+	text-align: left;
+}
+
+/* Headings */
+h1, .alpha {
+	@include font-size($h1-size);
+}
+
+h2, .beta {
+	@include font-size($h2-size);
+}
+
+h3, .gamma {
+	@include font-size($h3-size);
+}
+
+h4, .delta {
+	@include font-size($h4-size);
+}
+
+h5, .epsilon {
+	@include font-size($h5-size);
+}
+
+h6, .zeta {
+	@include font-size($h6-size);
+}
+
+/* Images */
+img {
+	max-width:100%;
+}
+
+img[width],
+img[height] {
+	max-width:none;
+}

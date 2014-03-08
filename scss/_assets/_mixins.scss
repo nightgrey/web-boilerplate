@@ -2,12 +2,14 @@
 	Mixins
 **/
 
+/* Box sizing */
 @mixin box-sizing($sizing) {
 	-webkit-box-sizing: $sizing;
 	   -moz-box-sizing: $sizing;
 			box-sizing: $sizing;
 }
 
+/* Placeholder styling */
 @mixin placeholder($color) {
 	&::-webkit-input-placeholder {
 		color: $color;
@@ -20,6 +22,31 @@
 	}
 }
 
+/* Style headings in one step */
+@mixin headings($from: 1, $to: 6){
+	%base-heading {
+		@content
+	}
+
+	@if $from >= 1 and $to <= 6{
+		@for $i from $from through $to{
+			h#{$i}{
+				@extend %base-heading;
+			}
+		}
+	}
+}
+
+/* Font size */
+@mixin font-size($font-size, $line-height:true) {
+	font-size: $font-size;
+	font-size: ($font-size / $base-font-size)*1rem;
+	@if $line-height == true{
+		line-height: ceil($font-size / $base-line-height) * ($base-line-height / $font-size);
+	}
+}
+
+/* Set breakpoints */
 @mixin breakpoint($breakpoint) {
 	@if $breakpoint == retina {
 		@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi), (-o-min-device-pixel-ratio: 5/4) {
@@ -29,18 +56,5 @@
 		@media (max-width: $breakpoint) {
 			@content;
 		}
-	}
-}
-
-
-/**
-	Extends
-**/
-
-%cf {
-	&:after {
-		content: '';
-		display: table;
-		clear: both;
 	}
 }
