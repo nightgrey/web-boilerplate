@@ -4,15 +4,16 @@
 
 
 /* Assets */
-@import "assets/vars";
-@import "assets/mixins";
-@import "assets/reset";
-@import "assets/typography";
-@import "assets/basic";
+@import "_assets/vars";
+@import "_assets/mixins";
+@import "_assets/normalize";
+@import "_assets/reset";
+@import "_assets/basic";
+@import "_assets/helper";
 
 /* Modules */
-@import "modules/header";
-@import "modules/footer";
+@import "_modules/header";
+@import "_modules/footer";
 
 /* Templates */
-@import "templates/home";
+@import "_templates/home";
