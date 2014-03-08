@@ -1,0 +1,46 @@
+/**
+	Mixins
+**/
+
+@mixin box-sizing($sizing) {
+	-webkit-box-sizing: $sizing;
+	   -moz-box-sizing: $sizing;
+			box-sizing: $sizing;
+}
+
+@mixin placeholder($color) {
+	&::-webkit-input-placeholder {
+		color: $color;
+	}
+	&:-moz-placeholder {
+		color: $color;
+	}
+	&:-ms-input-placeholder {
+		color: $color;
+	}
+}
+
+@mixin breakpoint($breakpoint) {
+	@if $breakpoint == retina {
+		@media (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi), (-o-min-device-pixel-ratio: 5/4) {
+			@content;
+		}
+	} @else {
+		@media (max-width: $breakpoint) {
+			@content;
+		}
+	}
+}
+
+
+/**
+	Extends
+**/
+
+%cf {
+	&:after {
+		content: '';
+		display: table;
+		clear: both;
+	}
+}
