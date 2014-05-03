@@ -49,6 +49,12 @@ th,td {
 }
 
 /* Headings */
+@include headings(1,6) {
+	@if $heading-font-family != null {
+		font-family: $heading-font-family;
+	}
+}
+
 h1, .alpha {
 	@include font-size($h1-size);
 }

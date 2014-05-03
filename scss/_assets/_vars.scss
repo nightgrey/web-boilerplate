@@ -2,23 +2,24 @@
     Vars
 **/
 
-/* Base font */
-$base-font-size:	16px;
-$base-line-height:	24px;
-$base-font-family:	sans-serif;
+/* Font */
+$base-font-size: 16px;
+$base-line-height: 24px;
+$base-font-family: serif;
+$heading-font-family: null;
 
 /* Base units */
-$base-spacing-unit:	$base-line-height;
-$half-spacing-unit:	$base-spacing-unit / 2;
-$line-height-ratio:	$base-line-height / $base-font-size;
+$base-spacing-unit: $base-line-height;
+$half-spacing-unit: $base-spacing-unit / 2;
+$line-height-ratio: $base-line-height / $base-font-size;
 
 /* Headings */
-$h1-size:			36px!default; // .alpha
-$h2-size:			30px!default; // .beta
-$h3-size:			24px!default; // .gamma
-$h4-size:			20px!default; // .delta
-$h5-size:			16px!default; // .epsilon
-$h6-size:			14px!default; // .zeta
+$h1-size: 36px; // .alpha
+$h2-size: 30px; // .beta
+$h3-size: 24px; // .gamma
+$h4-size: 20px; // .delta
+$h5-size: 16px; // .epsilon
+$h6-size: 14px; // .zeta
 
 /* Container */
 $container-size: 80%;
