@@ -1,8 +1,6 @@
 module.exports = function(grunt) {
-	/*
-	 * Project configuration
-	 */
 	grunt.initConfig({
+		// Variables
 		pkg: grunt.file.readJSON('package.json'),
 		dirs: {
 			js: 'js',
@@ -10,6 +8,10 @@ module.exports = function(grunt) {
 			css: 'css',
 			tmp: 'tmp'
 		},
+		banner: {
+			default: '/*\n * <%= pkg.name %> v<%= pkg.version %>\n * <%= grunt.template.today("dd.mm.yyyy, HH:MM:ss") %>\n */\n'
+		},
+		// Task configuration
 		concat: {
 			dist: {
 				src: ['<%= dirs.js %>/plugins.js', '<%= dirs.js %>/main.js'],
@@ -19,7 +21,8 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				options: {
-					except: ['jQuery']
+					except: ['jQuery'],
+					banner: '<%= banner.default %>'
 				},
 				files: {
 					'<%= dirs.js %>/main.min.js': ['<%= dirs.tmp %>/main.js']
@@ -49,7 +52,8 @@ module.exports = function(grunt) {
 		cssmin: {
 			dist: {
 				options: {
-					keepSpecialComments: 0
+					keepSpecialComments: 0,
+					banner: '<%= banner.default %>'
 				},
 				files: {
 					'<%= dirs.css %>/style.css': '<%= dirs.tmp %>/style.css'
@@ -59,7 +63,7 @@ module.exports = function(grunt) {
 		clean: ['<%= dirs.tmp %>'],
 		watch: {
 			styles: {
-				files: ['<%= dirs.scss %>/*.scss'],
+				files: ['<%= dirs.scss %>/**/*'],
 				tasks: ['styles']
 			},
 			scripts: {
@@ -70,8 +74,8 @@ module.exports = function(grunt) {
 	});
 
 	// Load plugins
-	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-sass');
 	grunt.loadNpmTasks('grunt-autoprefixer');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
