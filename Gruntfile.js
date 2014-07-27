@@ -14,6 +14,9 @@ module.exports = function(grunt) {
 			dist: 'dist',
 			tmp: '.tmp'
 		},
+		files: {
+			html: 'index.html'
+		},
 		banner: {
 			default: '/*\n * <%= pkg.name %> v<%= pkg.version %>\n * <%= grunt.template.today("dd.mm.yyyy, HH:MM:ss") %>\n */\n'
 		},
@@ -22,7 +25,7 @@ module.exports = function(grunt) {
 			options: {
 				dest: '<%= dirs.dist %>/<%= dirs.js %>'
 			},
-			html: 'index.html'
+			html: '<%= files.html %>'
 		},
 
 		sass: {
@@ -64,16 +67,16 @@ module.exports = function(grunt) {
 		copy: {
 			build: {
 				files: [
-					{src: 'index.html', dest: '<%= dirs.dist %>/index.html'},
+					{src: '<%= files.html %>', dest: '<%= dirs.dist %>/<%= files.html %>'},
 					{src: '<%= dirs.css %>/styles.css', dest: '<%= dirs.dist %>/<%= dirs.css %>/styles.css'},
-					{src: '<%= dirs.img %>', dest: '<%= dirs.dist %>/<%= dirs.img %>'},
+					{src: ['<%= dirs.img %>/*', '!<%= dirs.img %>/grunt-favicon.png'], dest: '<%= dirs.dist %>/<%= dirs.img %>/*'},
 					{src: ['./*.png', '*.ico'], dest: '<%= dirs.dist %>/'}
 				]
 			}
 		},
 
 		usemin: {
-			html: ['<%= dirs.dist %>/index.html']
+			html: ['<%= dirs.dist %>/<%= files.html %>']
 		},
 
 		clean: {
@@ -83,19 +86,36 @@ module.exports = function(grunt) {
 		watch: {
 			styles: {
 				files: ['<%= dirs.scss %>/**/*'],
-				tasks: ['watch-styles']
+				tasks: ['watch-styles'],
 			},
 			favicons: {
-				files: ['<%= dirs.img/grunt-favicon.png'],
+				files: ['<%= dirs.img %>/grunt-favicon.png'],
 				tasks: ['watch-favicons']
+			},
+			livereload: {
+				options: {
+					livereload: true
+				},
+				files: ['<%= dirs.css %>/*.css', '<%= dirs.js %>/*.js', '<%= files.html %>']
+			}
+		},
+
+		connect: {
+			options: {
+				livereload: true,
+				hostname: 'localhost',
+			},
+			livereload: {
+				options: {
+					open: true
+				}
 			}
 		}
 	});
 
 	// Tasks
 	grunt.registerTask('default', [
-		'sass',
-		'cssmin',
+		'watch'
 	]);
 
 	grunt.registerTask('build', [
@@ -112,6 +132,7 @@ module.exports = function(grunt) {
 
 	// Watch tasks
 	grunt.registerTask('dev', [
+		'connect',
 		'watch'
 	]);
 
