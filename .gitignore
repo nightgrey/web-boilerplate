@@ -2,3 +2,4 @@
 .codekit-cache
 node_modules
 .tmp
+dist
