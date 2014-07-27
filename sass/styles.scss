@@ -1,0 +1,29 @@
+/**
+	Boilerplate
+**/
+
+/* inuit.css defaults */
+@import "../library/inuit-defaults/settings.defaults";
+
+/* inuit.css tools */
+@import "../library/inuit-functions/tools.functions";
+@import "../library/inuit-mixins/tools.mixins";
+
+/* inuit.css generic */
+@import "../library/inuit-normalize/generic.normalize";
+@import "../library/inuit-box-sizing/generic.box-sizing";
+
+/* inuit.css base */
+@import "../library/inuit-page/base.page";
+
+
+/* Assets */
+@import "_assets/vars";
+
+/* Modules */
+@import "_modules/page";
+@import "_modules/header";
+@import "_modules/footer";
+
+/* Templates */
+@import "_templates/home";
