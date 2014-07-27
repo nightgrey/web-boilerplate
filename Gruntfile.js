@@ -1,90 +1,56 @@
 module.exports = function(grunt) {
+
 	grunt.initConfig({
-		// Variables
+		// Configuration
 		pkg: grunt.file.readJSON('package.json'),
-		dirs: {
-			js: 'js',
-			scss: 'scss',
-			css: 'css',
-			tmp: 'tmp'
-		},
 		banner: {
 			default: '/*\n * <%= pkg.name %> v<%= pkg.version %>\n * <%= grunt.template.today("dd.mm.yyyy, HH:MM:ss") %>\n */\n'
 		},
-		// Task configuration
-		concat: {
-			dist: {
-				src: ['<%= dirs.js %>/plugins.js', '<%= dirs.js %>/main.js'],
-				dest: '<%= dirs.tmp %>/main.js'
-			}
+
+		useminPrepare: {
+			options: {
+				dest: 'dist/js'
+			},
+			html: 'index.html'
 		},
-		uglify: {
-			dist: {
-				options: {
-					except: ['jQuery'],
-					banner: '<%= banner.default %>'
-				},
-				files: {
-					'<%= dirs.js %>/main.min.js': ['<%= dirs.tmp %>/main.js']
-				}
-			}
-		},
+
 		sass: {
-			dist: {
-				options: {
-					style: 'expanded',
-					precision: 3,
-					trace: true
-				},
-				files: {
-					'<%= dirs.tmp %>/style.css': '<%= dirs.scss %>/style.scss'
-				}
+			options: {
+				style: 'compressed'
 			},
+			files: {
+				'css/styles.css': 'sass/styles.scss'
+			}
 		},
-		autoprefixer: {
+
+		copy: {
 			dist: {
-				options: {
-					browsers: ['last 2 version']
-				},
-				src: '<%= dirs.tmp %>/style.css'
+				files: [
+					{src: 'index.html', dest: 'dist/index.html'},
+					{src: 'css/styles.css', dest: 'dist/css/styles.css'}
+				]
 			}
 		},
-		cssmin: {
-			dist: {
-				options: {
-					keepSpecialComments: 0,
-					banner: '<%= banner.default %>'
-				},
-				files: {
-					'<%= dirs.css %>/style.css': '<%= dirs.tmp %>/style.css'
-				}
-			}
-		},
-		clean: ['<%= dirs.tmp %>'],
-		watch: {
-			styles: {
-				files: ['<%= dirs.scss %>/**/*'],
-				tasks: ['styles']
-			},
-			scripts: {
-				files: ['<%= dirs.js %>/*.js', '!<%= dirs.js %>/*.min.js'],
-				tasks: ['scripts']
-			}
+
+		usemin: {
+			html: ['dist/index.html']
 		}
 	});
 
 	// Load plugins
-	grunt.loadNpmTasks('grunt-contrib-concat');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-autoprefixer');
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
-	grunt.loadNpmTasks('grunt-contrib-clean');
-	grunt.loadNpmTasks('grunt-contrib-watch');
+	require('matchdep').filter('grunt-*').forEach(grunt.loadNpmTasks);
 
 	// Tasks
-	grunt.registerTask('default', ['concat', 'uglify', 'sass', 'autoprefixer', 'cssmin', 'clean']);
-	grunt.registerTask('styles', ['sass', 'autoprefixer', 'cssmin', 'clean']);
-	grunt.registerTask('scripts', ['concat', 'uglify', 'clean']);
-	grunt.registerTask('live', ['watch']);
+	grunt.registerTask('default', [
+		'sass:dev'
+	]);
+
+	grunt.registerTask('build', [
+		'useminPrepare',
+		'sass',
+		'copy',
+		'concat',
+		'uglify',
+		'usemin'
+	]);
 }

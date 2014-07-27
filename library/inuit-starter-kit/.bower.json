@@ -1,0 +1,33 @@
+{
+  "name": "inuit-starter-kit",
+  "version": "0.2.8",
+  "authors": [
+    "Harry Roberts <harry@csswizardry.com>"
+  ],
+  "description": "A stripped back, barebones starter kit for the inuitcss framework",
+  "keywords": [
+    "inuitcss",
+    "oocss",
+    "css"
+  ],
+  "license": "Apache",
+  "dependencies": {
+    "inuit-defaults": "0.2.1",
+    "inuit-functions": "0.2.0",
+    "inuit-mixins": "0.2.3",
+    "inuit-box-sizing": "0.2.0",
+    "inuit-normalize": "3.0.1",
+    "inuit-page": "0.2.1"
+  },
+  "homepage": "https://github.com/inuitcss/starter-kit",
+  "_release": "0.2.8",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.8",
+    "commit": "af45ea29e6613c9c7eed9065c1f5419a8bed710e"
+  },
+  "_source": "git://github.com/inuitcss/starter-kit.git",
+  "_target": "~0.2.8",
+  "_originalSource": "inuit-starter-kit",
+  "_direct": true
+}

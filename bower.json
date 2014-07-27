@@ -1,0 +1,27 @@
+{
+  "name": "Boilerplate",
+  "version": "2.0.0",
+  "homepage": "https://github.com/nightowl8/boilerplate",
+  "authors": [
+    "Nico <nico@nightowl.me>"
+  ],
+  "description": "Boilerplate for starting projects using Sass and Grunt",
+  "keywords": [
+    "boilerplate"
+  ],
+  "license": "GNU GPL v2",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "library",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "inuit-starter-kit": "~0.2.8",
+    "modernizr": "~2.8.3",
+    "jquery": "~2.1.1"
+  }
+}
