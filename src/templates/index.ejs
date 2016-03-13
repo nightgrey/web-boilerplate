@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="">
+  <% include common/partials/head.ejs %>
+  <body>
+    <div class="page page--content">
+      <% include common/components/header.ejs %>
+      <% include common/components/main.ejs %>
+      <% include common/components/footer.ejs %>
+    </div>
+
+    <% include common/partials/footer.ejs %>
+    <% if(isProduction) { %>
+      <% include common/partials/analytics.ejs %>
+    <% } %>
+  </body>
+</html>
