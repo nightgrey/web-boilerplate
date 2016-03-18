@@ -2,10 +2,15 @@ import browserSync from 'browser-sync';
 import del from 'del';
 import gulp from 'gulp';
 import path from 'path';
-import plugin from 'gulp-load-plugins';
+import gulpLoadPlugins from 'gulp-load-plugins';
 import runSequence from 'run-sequence';
 import sassModuleImporter from 'sass-module-importer';
-import configuration from 'configuration';
+
+/**
+ * Constants
+ */
+const plugin = gulpLoadPlugins();
+
 
 /**
  * Lint (JavaScript)
@@ -13,7 +18,7 @@ import configuration from 'configuration';
  * ESLint
  */
 gulp.task('lint:javascript', () => {
-  gulp.src(configuration.javascript.src)
+  gulp.src('src/javascript/**/*.js')
     .pipe(plugin.eslint())
     .pipe(plugin.eslint.format())
     .pipe(plugin.if(!browserSync.active, plugin.eslint.failOnError()))
@@ -26,12 +31,12 @@ gulp.task('lint:javascript', () => {
  * Imagemin
  */
 gulp.task('images', () =>
-  gulp.src(configuration.images.src)
+  gulp.src('src/images/**/*')
     .pipe(plugin.cache(plugin.imagemin({
       progressive: true,
       interlaced: true
     })))
-    .pipe(gulp.dest(configuration.images.dist))
+    .pipe(gulp.dest('dist/images/'))
     .pipe(plugin.size({title: 'images'}))
 );
 
@@ -41,8 +46,7 @@ gulp.task('images', () =>
  */
 gulp.task('copy', () =>
   gulp.src([
-    'app/*',
-    '!app/*.html'
+    'src/*.*'
   ], {
     dot: true
   }).pipe(gulp.dest('dist'))
@@ -58,11 +62,8 @@ gulp.task('copy', () =>
  * cssnano
  */
 gulp.task('styles', () => {
-  // For better performance, don't add Sass partials to `gulp.src`
-  return gulp.src([
-      'src/styles/**/*.scss',
-      'src/styles/**/*.css'
-    ])
+  return gulp.src('src/styles/index.scss')
+    .pipe(plugin.rename('main.scss'))
     .pipe(plugin.newer('.tmp/styles'))
     .pipe(plugin.sourcemaps.init())
     .pipe(plugin.sass({
@@ -121,21 +122,9 @@ gulp.task('javascript:main', () =>
 gulp.task('html', () => {
   return gulp.src('src/templates/*.ejs')
     .pipe(plugin.ejs().on('error', plugin.util.log))
-    //.pipe(plugin.useref({searchPath: '{.tmp,app}'}))
-    //// Remove any unused CSS
-    //.pipe(plugin.if('*.css', plugin.uncss({
-    //  html: [
-    //    'app/index.html'
-    //  ],
-    //  // CSS Selectors for UnCSS to ignore
-    //  ignore: []
-    //})))
-
-    // Concatenate and minify styles
-    // In case you are still using useref build blocks
-    //.pipe(plugin.if('*.css', plugin.cssnano()))
-
-    // Minify any HTML
+    .pipe(plugin.rename(path => {
+      path.extname = '.html'
+    }))
     .pipe(plugin.if('*.html', plugin.htmlmin({
       removeComments: true,
       collapseWhitespace: true,
@@ -147,7 +136,6 @@ gulp.task('html', () => {
       removeStyleLinkTypeAttributes: true,
       removeOptionalTags: true
     })))
-    // Output files
     .pipe(plugin.if('*.html', plugin.size({title: 'html', showFiles: true})))
     .pipe(gulp.dest('dist'));
 });
@@ -175,7 +163,19 @@ gulp.task('serve', ['javascript:main', 'styles'], () => {
   });
 
   gulp.watch(['src/**/*.html'], browserSync.reload);
-  gulp.watch(['app/styles/**/*.{scss,css}'], ['styles', browserSync.reload]);
-  gulp.watch(['app/scripts/**/*.js'], ['lint', 'scripts']);
-  gulp.watch(['app/images/**/*'], browserSync.reload);
+  gulp.watch(['src/styles/**/*.{scss,css}'], ['styles', browserSync.reload]);
+  gulp.watch(['src/javascript/**/*.js'], ['lint', 'scripts']);
+  gulp.watch(['src/images/**/*'], browserSync.reload);
 });
+
+
+/**
+ * Default
+ */
+gulp.task('default', ['clean'], cb =>
+  runSequence(
+    'styles',
+    ['lint:javascript', 'html', 'javascript:main', 'images', 'copy'],
+    cb
+  )
+);
