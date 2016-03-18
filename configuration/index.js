@@ -5,9 +5,27 @@ import nconf from 'nconf';
  */
 nconf.defaults({
   paths: {
-    javascript: {
-      src: 'src/javascript/**/*.js'
+    root: {
+      source: 'src',
+      dist: 'dist'
+    },
+    styles: {
+      src: [
+        'src/styles/**/*.scss',
+        'src/styles/**/*.css'
+      ],
+      tmp: '.tmp/styles'
+    },
+    lint: {
+      javascript: 'src/javascript/**/*.js'
+    },
+    javascriptMain: {
+      src: 'src/javascript/index.js',
+      tmp: '.tmp/javascript',
       dist: 'dist/main.js'
+    },
+    html: {
+      src: 'src/templates/*.ejs'
     },
     images: {
       src: 'src/images/**/*',
