@@ -3,3 +3,4 @@
 *.css.map
 .tmp
 node_modules
+dist
