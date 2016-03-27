@@ -1,9 +1,6 @@
-import browserSync from 'browser-sync';
 import del from 'del';
 import gulp from 'gulp';
-import path from 'path';
 import gulpLoadPlugins from 'gulp-load-plugins';
-import runSequence from 'run-sequence';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import webpackConfiguration from './webpack.config.babel';
@@ -73,13 +70,19 @@ gulp.task('webpack:watch', (callback) => {
 /**
  * Build
  */
-gulp.task('build', ['clean'], cb => runSequence('webpack', cb));
+gulp.task('build', ['clean'], callback => {
+  gulp.run('webpack');
+  callback();
+});
 
 
 /**
  * Build (watch)
  */
-gulp.task('build:watch', ['clean'], cb => runSequence('webpack:watch', cb));
+gulp.task('build:watch', ['clean'], callback => {
+  gulp.run('webpack:watch');
+  callback();
+});
 
 
 /**

@@ -6,10 +6,11 @@ import path from 'path';
 import webpack from 'webpack';
 
 export default function(isDevelopement = true) {
+  /**
+   * Plugin configuration - because DRY
+   */
   const pluginConfiguration = {
     htmlWebpackPlugin: {
-      pageTitlePrefix: 'web-boilerplate',
-      pageTitleSeperator: '|',
       minify: {
         removeComments: true,
         removeCommentsFromCDATA: true,
@@ -29,12 +30,12 @@ export default function(isDevelopement = true) {
         removeOptionalTags: true,
         removeEmptyElements: true,
         keepClosingSlash: true
-      }
+      },
+      /** Custom data */
+      pageTitlePrefix: 'web-boilerplate',
+      pageTitleSeperator: '|',
+      themeColor: '#555555'
     }
-  };
-
-  let htmlMinifierOptions = {
-
   };
 
   const webpackConfiguration = {
@@ -90,19 +91,27 @@ export default function(isDevelopement = true) {
         allChunks: true
       }),
       new HtmlWebpackPlugin({
-        title: 'Index',
+        title: 'Home',
         hash: true,
         inject: true,
         template: 'templates/index.ejs',
         minify: pluginConfiguration.htmlWebpackPlugin.minify,
+        /** Custom data */
+        pageTitlePrefix: pluginConfiguration.htmlWebpackPlugin.pageTitlePrefix,
+        pageTitleSeperator: pluginConfiguration.htmlWebpackPlugin.pageTitleSeperator,
+        themeColor: pluginConfiguration.htmlWebpackPlugin.themeColor
       }),
       new HtmlWebpackPlugin({
-        title: 'Content',
+        title: 'Standard page',
         hash: true,
         inject: true,
         filename: 'content.html',
         template: 'templates/content.ejs',
-        minify: pluginConfiguration.htmlWebpackPlugin.minify
+        minify: pluginConfiguration.htmlWebpackPlugin.minify,
+        /** Custom data */
+        pageTitlePrefix: pluginConfiguration.htmlWebpackPlugin.pageTitlePrefix,
+        pageTitleSeperator: pluginConfiguration.htmlWebpackPlugin.pageTitleSeperator,
+        themeColor: pluginConfiguration.htmlWebpackPlugin.themeColor
       }),
       new CopyWebpackPlugin([
         { from: '*.*' }
