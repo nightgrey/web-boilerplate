@@ -1,0 +1,36 @@
+/**
+ * Inuit.css
+ */
+
+// Settings
+@import "~inuit-defaults/_settings.defaults";
+@import "~inuit-responsive-settings";
+
+// Tools
+@import "~inuit-functions";
+@import "~inuit-mixins";
+@import "~inuit-responsive-tools";
+
+// Generic
+@import "~inuit-normalize";
+@import "~inuit-box-sizing";
+@import "~inuit-shared";
+
+// Base
+@import "~inuit-page";
+@import "~inuit-headings";
+@import "~inuit-images";
+
+// Objects
+@import "~inuit-list-ui";
+@import "~inuit-list-block";
+@import "~inuit-list-inline";
+@import "~inuit-layout";
+
+// Components
+// ... will be handled via components folder
+
+// Trumps
+@import "~inuit-spacing";
+@import "~inuit-responsive-spacing";
+@import "~inuit-clearfix";
