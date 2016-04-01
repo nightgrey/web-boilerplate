@@ -2,12 +2,39 @@ import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import path from 'path';
+import autoprefixer from 'autoprefixer';
+import cssnano from 'cssnano';
 import webpack from 'webpack';
 
-export default function(isDevelopement = true) {
+export default function(isDevelopment = true) {
   /**
-   * Plugin configuration - because DRY
+   * Templates
+   * Define the templates you want to compile to HTML
+   */
+  const templates = [
+    {
+      title: 'Home',
+      template: 'index.ejs',
+      output: 'index.html'
+    },
+    {
+      title: 'Standard page',
+      template: 'standard.ejs',
+      output: 'standard.html'
+    }
+  ];
+
+  /**
+   * Repeating loader configuration
+   */
+  const loaderConfiguration = {
+    scss: {
+      loader: 'css-loader!postcss-loader!sass-loader'
+    }
+  };
+
+  /**
+   * Repeating plugin configuration
    */
   const pluginConfiguration = {
     htmlWebpackPlugin: {
@@ -32,15 +59,19 @@ export default function(isDevelopement = true) {
         keepClosingSlash: true
       },
       /** Custom data */
-      pageTitlePrefix: 'web-boilerplate',
+      pageTitle: 'web-boilerplate',
       pageTitleSeperator: '|',
       themeColor: '#555555'
     }
   };
 
-  const webpackConfiguration = {
+  let webpackConfiguration = {
     context: __dirname + '/src',
-    entry: [
+    entry: isDevelopment ? [
+      './components/index.js',
+      'webpack-dev-server/client?http://localhost:8080/',
+      'webpack/hot/dev-server'
+    ] : [
       './components/index.js'
     ],
     output: {
@@ -49,7 +80,7 @@ export default function(isDevelopement = true) {
       publicPath: '/',
       sourceMapFileName: '[file].map'
     },
-    devtool: isDevelopement ? 'cheap-source-map' : 'source-map',
+    devtool: isDevelopment ? 'cheap-source-map' : 'source-map',
     module: {
       loaders: [
         {
@@ -75,82 +106,100 @@ export default function(isDevelopement = true) {
         },
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract("style-loader", 'css-loader?sourceMap' + '!autoprefixer-loader?browsers=last 2 version' + '!sass-loader?outputStyle=expanded&sourceMap&sourceMapContents')
+          loader: ExtractTextPlugin.extract("style-loader", loaderConfiguration.scss.loader)
         }
       ]
     },
-    plugins: [
-      new webpack.optimize.OccurenceOrderPlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          screw_ie8: true,
-          warnings: false
-        }
-      }),
-      new ExtractTextPlugin('main.css', {
-        allChunks: true
-      }),
-      new HtmlWebpackPlugin({
-        title: 'Home',
-        hash: true,
-        inject: true,
-        template: 'templates/index.ejs',
-        minify: pluginConfiguration.htmlWebpackPlugin.minify,
-        /** Custom data */
-        pageTitlePrefix: pluginConfiguration.htmlWebpackPlugin.pageTitlePrefix,
-        pageTitleSeperator: pluginConfiguration.htmlWebpackPlugin.pageTitleSeperator,
-        themeColor: pluginConfiguration.htmlWebpackPlugin.themeColor
-      }),
-      new HtmlWebpackPlugin({
-        title: 'Standard page',
-        hash: true,
-        inject: true,
-        filename: 'content.html',
-        template: 'templates/content.ejs',
-        minify: pluginConfiguration.htmlWebpackPlugin.minify,
-        /** Custom data */
-        pageTitlePrefix: pluginConfiguration.htmlWebpackPlugin.pageTitlePrefix,
-        pageTitleSeperator: pluginConfiguration.htmlWebpackPlugin.pageTitleSeperator,
-        themeColor: pluginConfiguration.htmlWebpackPlugin.themeColor
-      }),
-      new CopyWebpackPlugin([
-        { from: '*.*' }
-      ])
+    plugins: (() => {
+      let plugins = [
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            screw_ie8: true,
+            warnings: false
+          }
+        }),
+        new ExtractTextPlugin('main.css', {
+          allChunks: true
+        }),
+        new CopyWebpackPlugin([
+          { from: '*.*' }
+        ])
+      ];
+
+
+      /**
+       * General
+       */
+      templates.forEach((element) => {
+        plugins.push(
+          new HtmlWebpackPlugin({
+            title: element.title,
+            hash: true,
+            inject: true,
+            template: `templates/${element.template}`,
+            filename: `${element.output}`,
+            minify: pluginConfiguration.htmlWebpackPlugin.minify,
+            pageTitle: pluginConfiguration.htmlWebpackPlugin.pageTitle,
+            pageTitleSeperator: pluginConfiguration.htmlWebpackPlugin.pageTitleSeperator,
+            themeColor: pluginConfiguration.htmlWebpackPlugin.themeColor
+          })
+        );
+      });
+
+
+      /**
+       * Development only
+       */
+      if(isDevelopment) {
+        plugins.push(
+          new webpack.HotModuleReplacementPlugin(),
+          new webpack.NoErrorsPlugin(),
+          new BrowserSyncPlugin({
+            host: 'localhost',
+            port: 3000,
+            proxy: 'http://localhost:8080/'
+          }, {
+            reload: false
+          })
+        );
+      }
+
+      /**
+       * Production
+       */
+      if(!isDevelopment) {
+        plugins.push(
+          new webpack.optimize.DedupePlugin()
+        );
+      }
+
+      return plugins;
+    })(),
+    postcss: () => [
+      autoprefixer({ browsers: 'last 2 version' }),
+      cssnano()
     ]
   };
+
+  /**
+   * General
+   */
+
+  /** Push template configuration to webpack's `plugins` array **/
+
 
 
   /**
    * Developement
    */
-  if(isDevelopement) {
-    webpackConfiguration.entry.push(
-      'webpack-dev-server/client?http://localhost:8080/',
-      'webpack/hot/dev-server'
-    );
 
-    webpackConfiguration.plugins.push(
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NoErrorsPlugin(),
-      new BrowserSyncPlugin({
-        host: 'localhost',
-        port: webpackConfiguration.webpack.browserSyncPort,
-        proxy: 'http://localhost:8080/'
-      }, {
-        reload: false
-      })
-    );
-  }
 
 
   /**
    * Production
    */
-  if(!isDevelopement) {
-    webpackConfiguration.plugins.push(
-      new webpack.optimize.DedupePlugin()
-    );
-  }
+
 
   return webpackConfiguration;
 };
