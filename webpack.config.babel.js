@@ -24,6 +24,7 @@ export default function(isDevelopment = true) {
     }
   ];
 
+
   /**
    * Repeating plugin configuration
    */
@@ -56,6 +57,10 @@ export default function(isDevelopment = true) {
     }
   };
 
+
+  /**
+   * Webpack configuration
+   */
   return {
     context: __dirname + '/src',
     entry: isDevelopment ? [
@@ -69,9 +74,10 @@ export default function(isDevelopment = true) {
       path: __dirname + '/dist',
       filename: 'main.js',
       publicPath: '/',
-      sourceMapFileName: '[file].map'
+      sourceMapFileName: '[file].map',
+      devtoolModuleFilenameTemplate: "sources/[resourcePath]?[hash]"
     },
-    devtool: isDevelopment ? 'cheap-source-map' : 'source-map',
+    devtool: isDevelopment ? 'cheap-module-eval-source-map' : 'source-map',
     module: {
       loaders: [
         {
