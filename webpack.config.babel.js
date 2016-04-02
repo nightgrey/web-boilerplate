@@ -81,16 +81,36 @@ export default function(isDevelopment = true) {
     module: {
       loaders: [
         {
+          test: /\.(gif|jpg|png|svg)$/,
           loader: 'url-loader?limit=10000!img?optimizationLevel=5',
-          test: /\.(gif|jpg|png|svg)$/
+          loaders: [
+            {
+              loader: 'url-loader',
+              query: {
+                limit: 10000
+              }
+            },
+            {
+              loader: 'img-loader',
+              query: {
+                optimizationLevel: 5
+              }
+            }
+          ]
         },
         {
-          loader: 'url-loader?limit=1',
-          test: /favicon\.ico$/
+          test: /favicon\.ico$/,
+          loader: 'url-loader',
+          query: {
+            limit: 1
+          }
         },
         {
-          loader: 'url-loader?limit=100000',
-          test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9]+)?$/
+          test: /\.(ttf|eot|woff(2)?)(\?[a-z0-9]+)?$/,
+          loader: 'url-loader',
+          query: {
+            limit: 100000
+          }
         },
         {
           test: /\.ejs$/,
@@ -98,7 +118,17 @@ export default function(isDevelopment = true) {
         },
         {
           test: /\.js$/,
-          loader: 'babel-loader!eslint-loader',
+          loaders: [
+            {
+              loader: 'babel-loader',
+              query: {
+                presets: ['es2015-webpack']
+              }
+            },
+            {
+              loader: 'eslint-loader'
+            }
+          ],
           exclude: '/node_modules/'
         },
         {
@@ -109,7 +139,7 @@ export default function(isDevelopment = true) {
     },
     plugins: (() => {
       let plugins = [
-        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
           compress: {
             screw_ie8: true,
@@ -121,7 +151,11 @@ export default function(isDevelopment = true) {
         }),
         new CopyWebpackPlugin([
           { from: '*.*' }
-        ])
+        ]),
+        new webpack.LoaderOptionsPlugin({
+          minimize: true,
+          debug: false
+        })
       ];
 
 
