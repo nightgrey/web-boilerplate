@@ -3,6 +3,7 @@ import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
+import runSequence from 'run-sequence';
 import webpackConfiguration from './webpack.config.babel';
 
 /**
@@ -14,9 +15,7 @@ const plugin = gulpLoadPlugins();
 /**
  * Clean temp and output directory
  */
-gulp.task('clean', () => {
-  return del(['dist/*'], {dot: true})
-});
+gulp.task('clean', () => del(['dist/*'], {dot: true}));
 
 
 /**
@@ -70,19 +69,13 @@ gulp.task('webpack:watch', (callback) => {
 /**
  * Build
  */
-gulp.task('build', ['clean'], callback => {
-  gulp.run('webpack');
-  callback();
-});
+gulp.task('build', () => runSequence('clean', 'webpack'));
 
 
 /**
  * Build (watch)
  */
-gulp.task('build:watch', ['clean'], callback => {
-  gulp.run('webpack:watch');
-  callback();
-});
+gulp.task('build:watch', () => runSequence('clean', 'webpack:watch'));
 
 
 /**
