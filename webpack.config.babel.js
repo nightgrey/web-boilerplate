@@ -25,15 +25,6 @@ export default function(isDevelopment = true) {
   ];
 
   /**
-   * Repeating loader configuration
-   */
-  const loaderConfiguration = {
-    scss: {
-      loader: 'css-loader!postcss-loader!sass-loader'
-    }
-  };
-
-  /**
    * Repeating plugin configuration
    */
   const pluginConfiguration = {
@@ -65,7 +56,7 @@ export default function(isDevelopment = true) {
     }
   };
 
-  let webpackConfiguration = {
+  return {
     context: __dirname + '/src',
     entry: isDevelopment ? [
       './components/index.js',
@@ -106,7 +97,7 @@ export default function(isDevelopment = true) {
         },
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract("style-loader", loaderConfiguration.scss.loader)
+          loader: ExtractTextPlugin.extract("style-loader", 'css-loader!postcss-loader!sass-loader')
         }
       ]
     },
@@ -181,25 +172,4 @@ export default function(isDevelopment = true) {
       cssnano()
     ]
   };
-
-  /**
-   * General
-   */
-
-  /** Push template configuration to webpack's `plugins` array **/
-
-
-
-  /**
-   * Developement
-   */
-
-
-
-  /**
-   * Production
-   */
-
-
-  return webpackConfiguration;
 };
