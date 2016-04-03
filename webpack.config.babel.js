@@ -120,10 +120,7 @@ export default function(isDevelopment = true) {
           test: /\.js$/,
           loaders: [
             {
-              loader: 'babel-loader',
-              query: {
-                presets: ['es2015-webpack']
-              }
+              loader: 'babel-loader'
             },
             {
               loader: 'eslint-loader'
@@ -133,7 +130,7 @@ export default function(isDevelopment = true) {
         },
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract("style-loader", 'css-loader!postcss-loader!sass-loader')
+          loader: ExtractTextPlugin.extract("style-loader", 'css-loader?' + JSON.stringify({autoprefixer: {remove: true, browsers: ['last 2 versions']}, discardComments: {removeAll: isDevelopment === false}}) + '!sass-loader')
         }
       ]
     },
@@ -151,9 +148,13 @@ export default function(isDevelopment = true) {
         }),
         new CopyWebpackPlugin([
           { from: '*.*' }
-        ]),
+        ], {
+          ignore: [
+            '.babelrc'
+          ]
+        }),
         new webpack.LoaderOptionsPlugin({
-          minimize: true,
+          minimize: isDevelopment === false,
           debug: false
         })
       ];
@@ -206,10 +207,6 @@ export default function(isDevelopment = true) {
       }
 
       return plugins;
-    })(),
-    postcss: () => [
-      autoprefixer({ browsers: 'last 2 version' }),
-      cssnano()
-    ]
+    })()
   };
 };
