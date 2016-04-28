@@ -1,11 +1,11 @@
 {
   "name": "web-boilerplate",
   "version": "3.0.1",
-  "private": true,,
+  "private": "true",
   "description": "Personal boilerplate for developing normal, boring, static websites and/or templates for various CMS systems",
   "engines": {
     "node": ">= 6"
-  }
+  },
   "scripts": {
     "build": "gulp build",
     "watch": "gulp build:watch"
