@@ -19,6 +19,17 @@ gulp.task('clean', () => del(['dist/*'], {dot: true}));
 
 
 /**
+ * Lint javascript
+ */
+gulp.task('lint:javascript', () => 
+	gulp.src(['src/components/**/*.js','!node_modules/**'])
+		.pipe(plugin.eslint())
+		.pipe(plugin.eslint.format())
+		.pipe(plugin.eslint.failAfterError())
+);
+
+
+/**
  * Run webpack
  */
 gulp.task('webpack', (callback) => {
@@ -27,8 +38,8 @@ gulp.task('webpack', (callback) => {
 
     // To save the JSON statistics, uncomment the two lines below.
     // These JSON statistics can be analyzed by:
-    // * http://webpack.github.io/analyse
-    // * https://github.com/robertknight/webpack-bundle-size-analyzer.
+    // http://webpack.github.io/analyse
+    // https://github.com/robertknight/webpack-bundle-size-analyzer
 
     // const fs = require('fs');
     // fs.writeFileSync('./bundle-stats.json', JSON.stringify(jsonStats));
