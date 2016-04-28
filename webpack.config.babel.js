@@ -2,6 +2,7 @@ import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import SassLintWebpackPlugin from 'sasslint-webpack-plugin';
 import webpack from 'webpack';
 
 export default function(isDevelopment = true) {
@@ -128,7 +129,7 @@ export default function(isDevelopment = true) {
         },
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract('style-loader', 'css-loader?' + JSON.stringify({autoprefixer: {remove: true, browsers: ['last 2 versions']}, discardComments: {removeAll: isDevelopment === false}}) + '!sass-loader')
+          loader: ExtractTextPlugin.extract('style-loader', `css-loader?${JSON.stringify({autoprefixer: {remove: true, browsers: ['last 2 versions']}, discardComments: {removeAll: isDevelopment === false}})}!sass-loader`)
         }
       ]
     },
@@ -154,6 +155,16 @@ export default function(isDevelopment = true) {
         new webpack.LoaderOptionsPlugin({
           minimize: isDevelopment === false,
           debug: false
+        }),
+        new SassLintWebpackPlugin({
+          configFile: `${__dirname}/sass-lint.yml`,
+          ignoreFiles: [],
+          ignorePlugins: [ExtractTextPlugin],
+          glob: 'src/components/**/*.scss',
+          quiet: false,
+          failOnWarning: false,
+          failOnError: false,
+          testing: false
         })
       ];
 

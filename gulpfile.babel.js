@@ -28,6 +28,16 @@ gulp.task('lint:javascript', () =>
 		.pipe(plugin.eslint.failAfterError())
 );
 
+/**
+ * Lint SASS
+ */
+gulp.task('lint:sass', () => {
+	gulp.src('src/components/**/*.scss')
+		.pipe(plugin.sassLint())
+		.pipe(plugin.sassLint.format())
+		.pipe(plugin.sassLint.failOnError())
+});
+
 
 /**
  * Run webpack
