@@ -2,8 +2,6 @@ import BrowserSyncPlugin from 'browser-sync-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
 import webpack from 'webpack';
 
 export default function(isDevelopment = true) {
@@ -21,7 +19,7 @@ export default function(isDevelopment = true) {
       title: 'Standard page',
       template: 'standard.ejs',
       output: 'standard.html'
-    }
+    },
   ];
 
 
@@ -62,7 +60,7 @@ export default function(isDevelopment = true) {
    * Webpack configuration
    */
   return {
-    context: __dirname + '/src',
+    context: `${__dirname}/src`,
     entry: isDevelopment ? [
       './components/index.js',
       'webpack-dev-server/client?http://localhost:8080/',
@@ -71,11 +69,11 @@ export default function(isDevelopment = true) {
       './components/index.js'
     ],
     output: {
-      path: __dirname + '/dist',
+      path: `${__dirname}/dist`,
       filename: 'main.js',
       publicPath: '/',
       sourceMapFileName: '[file].map',
-      devtoolModuleFilenameTemplate: "sources/[resourcePath]?[hash]"
+      devtoolModuleFilenameTemplate: 'sources/[resourcePath]?[hash]'
     },
     devtool: isDevelopment ? 'cheap-module-eval-source-map' : 'source-map',
     module: {
@@ -130,12 +128,12 @@ export default function(isDevelopment = true) {
         },
         {
           test: /\.scss$/,
-          loader: ExtractTextPlugin.extract("style-loader", 'css-loader?' + JSON.stringify({autoprefixer: {remove: true, browsers: ['last 2 versions']}, discardComments: {removeAll: isDevelopment === false}}) + '!sass-loader')
+          loader: ExtractTextPlugin.extract('style-loader', 'css-loader?' + JSON.stringify({autoprefixer: {remove: true, browsers: ['last 2 versions']}, discardComments: {removeAll: isDevelopment === false}}) + '!sass-loader')
         }
       ]
     },
     plugins: (() => {
-      let plugins = [
+      const plugins = [
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({
           compress: {
@@ -209,4 +207,4 @@ export default function(isDevelopment = true) {
       return plugins;
     })()
   };
-};
+}

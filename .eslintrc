@@ -1,4 +1,9 @@
 {
   "parser": "babel-eslint",
-  "extends" : ["airbnb/base"]
+  "extends" : ["airbnb/base"],
+  "rules": {
+  	'comma-dangle': 0,
+  	'space-before-function-paren': 0,
+  	'keyword-spacing': 0
+  }
 }
